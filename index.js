@@ -1,18 +1,11 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:');
+import sqlite3 from 'sqlite3';
+import Database from './db_func.js';
 
-db.serialize(() => {
-	db.run("CREATE TABLE lorem (info TEXT)");
+const DB_NAME = 'database'
 
-  const stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-  for (let i = 0; i < 10; i++) {
-    stmt.run("Ipsum " + i);
-  }
-  stmt.finalize();
+const db = new Database(DB_NAME);
 
-  db.each("SELECT rowid AS id, info FROM lorem", (err, row) => {
-    console.log(row.id + ": " + row.info);
-  });
-});
-
-db.close();
+// db.createTable('test');
+db.insertData('test', 'BTC/USDT', 25468);
+db.showTable('test');
+db.closeConnection();
